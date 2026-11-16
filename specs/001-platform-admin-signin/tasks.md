@@ -89,13 +89,13 @@
 
 **Independent Test**: Compare pages to documented tokens; Tab through the shell with visible focus ring; check phone/tablet/desktop widths.
 
-- [ ] T030 [US3] Replace `app/globals.css` variables with the `:root` block from `docs/Design System.md` section 4 (background `#111113`, card `#17171a`, popover `#1d1d21`, primary `#5ea6f2`, accent `#172a45`, border `#2a2a2f`, input `#6b6b75`, ring `#5ea6f2`, sidebar tokens, `--success`, `--warning`, `--radius: 0.5rem`, `color-scheme: dark`); register `--success` and `--warning` in the Tailwind theme; remove any light-mode or `.dark` overrides
-- [ ] T031 [US3] Update `app/layout.tsx`: `<html lang="en" className="dark">`, Geist and Geist Mono via `next/font` with fallback stacks, `color-scheme` and `theme-color` (`#111113`) metadata; no ThemeProvider or toggle
-- [ ] T032 [P] [US3] Ensure interactive elements show a 2px `--ring` focus ring with 2px offset (shared in `components/ui/*` or `app/globals.css`), never removed; controls at least 40px high
-- [ ] T033 [P] [US3] Add reduced-motion handling (transitions 150-200ms, disabled under `prefers-reduced-motion`) in `app/globals.css`
-- [ ] T034 [P] [US3] Make admin shell responsive: sidebar collapses on small screens (shadcn sidebar mobile sheet), no horizontal scroll at phone width, in `components/admin/admin-sidebar.tsx` and `app/admin/layout.tsx`
-- [ ] T035 [P] [US3] Add `app/robots.ts` disallowing `/admin`
-- [ ] T036 [US3] Verify contrast and keyboard navigation against the Design System table (text 4.5:1, controls 3:1) and note results in `specs/001-platform-admin-signin/quickstart.md`
+- [X] T030 [US3] Replace `app/globals.css` variables with the `:root` block from `docs/Design System.md` section 4 (background `#111113`, card `#17171a`, popover `#1d1d21`, primary `#5ea6f2`, accent `#172a45`, border `#2a2a2f`, input `#6b6b75`, ring `#5ea6f2`, sidebar tokens, `--success`, `--warning`, `--radius: 0.5rem`, `color-scheme: dark`); register `--success` and `--warning` in the Tailwind theme; remove any light-mode or `.dark` overrides
+- [X] T031 [US3] Update `app/layout.tsx`: `<html lang="en" className="dark">`, Geist and Geist Mono via `next/font` with fallback stacks, `color-scheme` and `theme-color` (`#111113`) metadata; no ThemeProvider or toggle
+- [X] T032 [P] [US3] Ensure interactive elements show a 2px `--ring` focus ring with 2px offset (shared in `components/ui/*` or `app/globals.css`), never removed; controls at least 40px high
+- [X] T033 [P] [US3] Add reduced-motion handling (transitions 150-200ms, disabled under `prefers-reduced-motion`) in `app/globals.css`
+- [X] T034 [P] [US3] Make admin shell responsive: sidebar collapses on small screens (shadcn sidebar mobile sheet), no horizontal scroll at phone width, in `components/admin/admin-sidebar.tsx` and `app/admin/layout.tsx`
+- [X] T035 [P] [US3] Add `app/robots.ts` disallowing `/admin`
+- [X] T036 [US3] Verify contrast and keyboard navigation against the Design System table (text 4.5:1, controls 3:1) and note results in `specs/001-platform-admin-signin/quickstart.md`
 
 **Checkpoint**: Theme applied everywhere; accessibility baseline checked.
 

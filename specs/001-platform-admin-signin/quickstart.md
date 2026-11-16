@@ -53,6 +53,32 @@ The backend allow-list (`ADMIN_CLERK_USER_IDS`) is the real security boundary; t
 
    The administrator's Clerk user ID (`user_...`) is shown under Users → the user's profile. Multiple IDs are comma-separated. An unset or empty value denies everyone.
 
+## Theme and accessibility verification (T036)
+
+Contrast ratios were recomputed with the WCAG 2.x relative-luminance formula from the token hex values in `app/globals.css`; all match `docs/Design System.md` section 3.3.
+
+| Pair | Ratio | Needed | Result |
+|---|---|---|---|
+| Main text on background / card / popover | 16.1 / 15.3 / 14.4 | 4.5 | Pass |
+| Secondary text on background / card / popover | 7.4 / 7.0 / 6.6 | 4.5 | Pass |
+| Primary on background / card / deep blue | 7.4 / 7.0 / 5.7 | 4.5 | Pass |
+| Text on primary button | 7.3 | 4.5 | Pass |
+| Main / secondary text on deep blue | 12.4 / 5.6 | 4.5 | Pass |
+| Success / warning / destructive on card | 7.8 / 8.0 / 6.1 | 4.5 | Pass |
+| Focus ring on background / card | 7.4 / 7.0 | 3 | Pass |
+| Form control border (`--input`) on background / card / popover | 3.6 / 3.4 / 3.2 | 3 | Pass |
+
+Checked in code and the production build (`npm run build`, then `GET /` and `/robots.txt`):
+
+- `<html>` has `class="dark"`, `theme-color` `#111113`, and `color-scheme` `dark`; there is no theme provider or toggle.
+- `/robots.txt` disallows `/admin`.
+- Focus: one unlayered `:focus-visible` rule in `app/globals.css` draws a 2px `--ring` outline with 2px offset and overrides component `outline-none`; the per-component focus rings were removed so it is not doubled.
+- Controls: button (default, sm, lg, icon) and input are 40px high.
+- Motion: transitions default to 150ms ease-out; `prefers-reduced-motion` disables them.
+- Responsive: the shadcn sidebar uses its mobile sheet below the breakpoint; the content area has `min-w-0` to avoid horizontal scroll.
+
+Still to do by hand (needs a signed-in session): Tab through the admin shell at phone, tablet, and desktop widths and confirm the ring is visible on every control and there is no horizontal scroll. Result: [ ] confirmed.
+
 ## Provisioning notes (record results here)
 
 - Clerk restricted sign-up: documented as **Invite-only** (Restrictions page; the Allowlist feature does not apply in Invite-only mode). Plan availability is not confirmed from documentation alone — confirm in the Dashboard on the current plan and record it here: [ ] confirmed.
