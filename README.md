@@ -4,8 +4,6 @@ A full-stack portfolio platform for sharing professional experience, software pr
 
 **Project status:** The application is in its foundation stage. The public homepage is currently a “Coming soon” placeholder, and the admin sign-in and application shell are being established. The content modules described below are planned; they are not all implemented yet.
 
-[Repository](https://github.com/mjsamaha/personal-developer-portfolio)
-
 ## Vision
 
 The finished site is intended to include:
