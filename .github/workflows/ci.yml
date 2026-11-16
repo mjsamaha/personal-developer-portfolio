@@ -1,0 +1,45 @@
+name: CI
+
+# Plain `pull_request` (not `pull_request_target`): pull requests from forks run
+# without access to repository secrets. This workflow uses no secrets at all.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# Least privilege: the token can only read repository contents.
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # Fake build-time values only. Never put real credentials in this file;
+      # real values live in Vercel and Convex environment settings.
+      NEXT_PUBLIC_CONVEX_URL: https://placeholder.convex.cloud
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_ZXhhbXBsZS5jbGVyay5hY2NvdW50cy5kZXYk
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      # Actions are pinned to full commit SHAs (the comment is the release tag);
+      # Dependabot keeps them current.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: npm
+      # Dependency install scripts are not needed for lint, test, or build.
+      - run: npm ci --ignore-scripts
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build

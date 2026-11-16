@@ -83,20 +83,24 @@ Start the Next.js development server in another terminal:
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). The local site requires valid Clerk and Convex configuration to use integrated authentication and backend features.
+Open [http://localhost:3000](http://localhost:3000). The local site requires valid Clerk and Convex configuration to use integrated authentication and backend features. For the Clerk and Convex provisioning steps (restricted sign-up, Google SSO, the `convex` JWT template, allow-listing the administrator) and the full validation scenarios, follow the [quickstart](specs/001-platform-admin-signin/quickstart.md).
+
+## Continuous integration and deployment
+
+Every pull request and push to `main` runs [`.github/workflows/ci.yml`](.github/workflows/ci.yml): `npm ci`, lint, format check, typecheck, tests, and a production build. Deployment uses Vercel's Git integration (a preview per pull request, production from `main`); setup is documented in the [quickstart](specs/001-platform-admin-signin/quickstart.md).
 
 ## Available scripts
 
-| Command | Description |
-| --- | --- |
-| `npm run dev` | Start the Next.js development server |
-| `npm run build` | Create a production build |
-| `npm run start` | Start the production server |
-| `npm run lint` | Run ESLint |
-| `npm run format:check` | Check formatting with Prettier |
-| `npm run format` | Format supported files with Prettier |
-| `npm run typecheck` | Run the TypeScript compiler without emitting files |
-| `npm test` | Run the Vitest test suite |
+| Command                | Description                                        |
+| ---------------------- | -------------------------------------------------- |
+| `npm run dev`          | Start the Next.js development server               |
+| `npm run build`        | Create a production build                          |
+| `npm run start`        | Start the production server                        |
+| `npm run lint`         | Run ESLint                                         |
+| `npm run format:check` | Check formatting with Prettier                     |
+| `npm run format`       | Format supported files with Prettier               |
+| `npm run typecheck`    | Run the TypeScript compiler without emitting files |
+| `npm test`             | Run the Vitest test suite                          |
 
 ## Repository layout
 
@@ -112,9 +116,9 @@ public/       Static assets
 
 ## Project documentation
 
-- [High-level application overview](docs/High-level%20application%20overview%20(v2).md)
+- [High-level application overview](<docs/High-level%20application%20overview%20(v2).md>)
 - [Product requirements](docs/Product%20Requirements.md)
-- [Technology stack](docs/Tech%20Stack%20(v2).md)
+- [Technology stack](<docs/Tech%20Stack%20(v2).md>)
 - [Design system](docs/Design%20System.md)
 - [Engineering principles](docs/Engineering%20Principles.md)
 - [Data model and schema conventions](docs/Data%20Model%20and%20Schema%20Conventions.md)

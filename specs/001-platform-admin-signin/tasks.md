@@ -107,9 +107,9 @@
 
 **Independent Test**: Fresh clone reaches the working sign-in page following docs; a pull request runs all checks and gets a preview.
 
-- [ ] T037 [US4] Create `.github/workflows/ci.yml` running on pull requests and pushes to `main`: npm ci, `npm run lint`, `npm run format:check`, `npm run typecheck`, `npm test`, `npm run build`
-- [ ] T038 [P] [US4] Create or update `README.md` with setup steps (prerequisites, `.env.local`, `npx convex dev`, `npm run dev`) referencing `.env.example` and `specs/001-platform-admin-signin/quickstart.md`
-- [ ] T039 [P] [US4] Document in `docs/Tech Stack (v2).md` and `docs/Engineering Principles.md` the resolved decisions: npm as package manager and Vitest + `convex-test` adopted
+- [X] T037 [US4] Create `.github/workflows/ci.yml` running on pull requests and pushes to `main`: npm ci, `npm run lint`, `npm run format:check`, `npm run typecheck`, `npm test`, `npm run build`
+- [X] T038 [P] [US4] Create or update `README.md` with setup steps (prerequisites, `.env.local`, `npx convex dev`, `npm run dev`) referencing `.env.example` and `specs/001-platform-admin-signin/quickstart.md`
+- [X] T039 [P] [US4] Document in `docs/Tech Stack (v2).md` and `docs/Engineering Principles.md` the resolved decisions: npm as package manager and Vitest + `convex-test` adopted
 - [ ] T040 [US4] Connect Vercel Git integration, set per-environment variables (separate Clerk instances, Convex deployments), enable branch protection requiring CI, and set spending limits/alerts on Convex, Vercel, Cloudflare; record in `specs/001-platform-admin-signin/quickstart.md`
 
 **Checkpoint**: Fresh-clone setup works; PRs are gated.
@@ -118,10 +118,10 @@
 
 ## Phase 7: Polish & Cross-Cutting Concerns
 
-- [ ] T041 Run all checks (`npm run lint`, `npm run format:check`, `npm run typecheck`, `npm test`, `npm run build`) and fix failures
-- [ ] T042 Run every scenario in `specs/001-platform-admin-signin/quickstart.md` and tick results
-- [ ] T043 Confirm no secrets are committed and `.env.example` matches all variables used in code
-- [ ] T044 Check any `any` or non-null assertion carries an explanatory comment (constitution IV)
+- [X] T041 Run all checks (`npm run lint`, `npm run format:check`, `npm run typecheck`, `npm test`, `npm run build`) and fix failures
+- [X] T042 Run every scenario in `specs/001-platform-admin-signin/quickstart.md` and tick results
+- [X] T043 Confirm no secrets are committed and `.env.example` matches all variables used in code
+- [X] T044 Check any `any` or non-null assertion carries an explanatory comment (constitution IV)
 
 ---
 

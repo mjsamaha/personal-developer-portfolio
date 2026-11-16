@@ -36,6 +36,20 @@ Expected: all pass; tests cover the cases in [contracts/backend-functions.md](./
 6. View page source/robots: `/admin` has `noindex`; `/robots.txt` disallows it.
 7. Open a pull request → CI runs all checks and a Vercel preview is created (US4-2).
 
+### Scenario results (T042)
+
+Verified on 2026-11-15 against a local production build (`npm run build` + `npm run start`) with `curl`, plus the automated suite:
+
+- [x] 1. Signed out, `/admin` → `307` redirect to `/sign-in`.
+- [ ] 2. Sign in as the administrator, see shell, sign out → needs a browser session (manual).
+- [ ] 3. Another Google account refused → needs a second Google account and Clerk Invite-only enabled (manual).
+- [x] 4. `admin.adminPing` rejects unauthenticated and non-admin, succeeds for admin, rejects everyone on an empty list → covered by `tests/convex/auth.test.ts` (12 tests pass). Optional extra check from the Convex dashboard is still manual.
+- [ ] 5. Design System tokens, focus ring, and widths → see the T036 section; keyboard and width check is manual.
+- [x] 6. `/admin` carries `noindex, nofollow`; `/robots.txt` disallows `/admin`.
+- [ ] 7. Pull request runs CI and a Vercel preview is created → needs the branch pushed (see the T040 section).
+
+Also confirmed: the public home page has one `<h1>` and no link to `/sign-in` or `/admin`.
+
 ## Clerk and Convex provisioning steps
 
 The backend allow-list (`ADMIN_CLERK_USER_IDS`) is the real security boundary; the Clerk settings below reduce who can create an account at all.
@@ -78,6 +92,71 @@ Checked in code and the production build (`npm run build`, then `GET /` and `/ro
 - Responsive: the shadcn sidebar uses its mobile sheet below the breakpoint; the content area has `min-w-0` to avoid horizontal scroll.
 
 Still to do by hand (needs a signed-in session): Tab through the admin shell at phone, tablet, and desktop widths and confirm the ring is visible on every control and there is no horizontal scroll. Result: [ ] confirmed.
+
+## Deployment setup: Vercel, Convex, Clerk, branch protection (T040)
+
+Sources: [Convex on Vercel](https://docs.convex.dev/production/hosting/vercel). The Vercel Convex build command makes Convex push functions and inject the Convex URL at build time. Complete in this order; record results in the notes below.
+
+### 1. Create the Vercel project
+
+1. Sign in at <https://vercel.com> with GitHub. Click **Add New… → Project**, import `mjsamaha/personal-developer-portfolio`, and grant access to the repository.
+2. Framework preset: **Next.js** (auto-detected). Root directory: repository root.
+3. Open **Build and Output Settings** and override **Build Command** with: `npx convex deploy --cmd 'npm run build'`. Leave install as `npm install` (auto-detected from `package-lock.json`).
+4. Before the first deploy, add environment variables (next section). Then click **Deploy**.
+5. Under **Settings → Git**, confirm the production branch is `main`. Vercel then builds a preview for every pull request automatically.
+
+### 2. Convex deploy keys (Convex Dashboard → project → Settings)
+
+- Production: **Generate Production Deploy Key** with the `deployment:deploy` permission.
+- Preview: **Generate Preview Deploy Key**. Convex then creates a fresh backend for each preview. Whether preview deployments are available is plan-dependent; confirm on your plan. If unavailable, previews cannot get their own backend, so do not point them at production.
+- Preview Convex deployments start empty, so set defaults in Convex project **Settings → Default environment variables** for the preview/dev types: `CLERK_JWT_ISSUER_DOMAIN` (development Clerk instance issuer) and `ADMIN_CLERK_USER_IDS` (your development Clerk user ID).
+
+### 3. Vercel environment variables (Project → Settings → Environment Variables)
+
+Names only; never paste values into the repository. Scope each variable to the listed environment only.
+
+| Variable | Production | Preview |
+|---|---|---|
+| `CONVEX_DEPLOY_KEY` | production deploy key | preview deploy key |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | production Clerk instance | development Clerk instance |
+| `CLERK_SECRET_KEY` | production Clerk instance | development Clerk instance |
+| `NEXT_PUBLIC_CLERK_SIGN_IN_URL` | `/sign-in` | `/sign-in` |
+
+`NEXT_PUBLIC_CONVEX_URL` is set by `npx convex deploy` during the build; do not set it by hand on Vercel.
+
+### 4. Production Clerk instance and Convex production environment
+
+- Clerk does not accept a `*.vercel.app` URL for a production instance, so attach a custom domain in Vercel (**Settings → Domains**) first, then create the production instance in Clerk and add that domain.
+- In the production Clerk instance repeat the steps in "Clerk and Convex provisioning steps" above (Invite-only, Google SSO with your own Google OAuth client, `convex` JWT template).
+- In the Convex **production** deployment set `CLERK_JWT_ISSUER_DOMAIN` (production issuer) and `ADMIN_CLERK_USER_IDS` (your production Clerk user ID; it differs from the development ID).
+- Until the custom domain exists, do not expose production data; the backend still denies everyone but the allow-listed ID.
+
+### 5. Branch protection requiring CI
+
+After the first workflow run, the status check is named `checks`. In GitHub: **Settings → Branches → Add branch ruleset/protection** for `main`: require a pull request, require status check `checks`, require branches to be up to date. Or with the CLI:
+
+```text
+gh api -X PUT repos/mjsamaha/personal-developer-portfolio/branches/main/protection --input protection.json
+```
+
+where `protection.json` contains `{"required_status_checks":{"strict":true,"contexts":["checks"]},"enforce_admins":false,"required_pull_request_reviews":null,"restrictions":null}`.
+
+### 6. Spending limits and alerts
+
+- **Vercel**: Team **Settings → Billing → Spend Management**: enable and set a monthly amount and notifications.
+- **Convex**: Team **Settings → Billing**: review plan limits and enable usage alerts or a spending cap where offered.
+- **Cloudflare**: **Billing → Notifications**: add usage/billing alerts for R2 (R2 is not used yet).
+
+Exact option names change; confirm in each dashboard and record what is available.
+
+### Results to record
+
+- [ ] Vercel project created and first deploy succeeded (URL: ______)
+- [ ] Preview deployment created for a pull request
+- [ ] Convex preview deployments available on this plan: yes / no
+- [ ] Production Clerk instance and custom domain set up
+- [ ] Branch protection requires `checks`
+- [ ] Spending limits/alerts set: Vercel [ ] Convex [ ] Cloudflare [ ]
 
 ## Provisioning notes (record results here)
 
