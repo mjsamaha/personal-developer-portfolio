@@ -36,8 +36,26 @@ Expected: all pass; tests cover the cases in [contracts/backend-functions.md](./
 6. View page source/robots: `/admin` has `noindex`; `/robots.txt` disallows it.
 7. Open a pull request → CI runs all checks and a Vercel preview is created (US4-2).
 
+## Clerk and Convex provisioning steps
+
+The backend allow-list (`ADMIN_CLERK_USER_IDS`) is the real security boundary; the Clerk settings below reduce who can create an account at all.
+
+1. **Restrict sign-up**: Clerk Dashboard → Configure → Restrictions → Sign-up mode → **Invite-only** (sign-up only via invitation or manual user creation). Do not leave it on Public.
+2. **Enable Google SSO**: Configure → SSO connections → add Google (development instances use shared credentials; production needs your own Google OAuth client). Disable other sign-in methods (email/password, other providers).
+3. **Create the administrator account**: with Invite-only on, sign-up is closed, so invite the administrator's Google email (`matthewsamaha@gmail.com`) from Users → Invitations (or create the user manually), accept the invitation, and sign in once.
+4. **Create the `convex` JWT template**: Configure → JWT templates → New template → Convex (name must be `convex`). Copy the **Issuer** URL.
+5. **Set Convex environment variables** (development deployment; repeat per deployment):
+
+   ```text
+   npx convex env set CLERK_JWT_ISSUER_DOMAIN <issuer-url-from-step-4>
+   npx convex env set ADMIN_CLERK_USER_IDS <user_id-of-administrator>
+   ```
+
+   The administrator's Clerk user ID (`user_...`) is shown under Users → the user's profile. Multiple IDs are comma-separated. An unset or empty value denies everyone.
+
 ## Provisioning notes (record results here)
 
-- Confirm Clerk's restricted sign-up setting name and plan availability.
+- Clerk restricted sign-up: documented as **Invite-only** (Restrictions page; the Allowlist feature does not apply in Invite-only mode). Plan availability is not confirmed from documentation alone — confirm in the Dashboard on the current plan and record it here: [ ] confirmed.
+- Authorization does not depend on this setting: any account that signs up anyway is `denied` by `access.current` and rejected by every `admin*` function.
 - Confirm Convex preview-deployment isolation (plan-dependent).
 - Set spending limits/alerts on Convex, Vercel, and Cloudflare before launch.

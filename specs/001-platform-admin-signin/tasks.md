@@ -68,16 +68,16 @@
 
 ### Tests for User Story 2
 
-- [ ] T023 [P] [US2] Add `tests/convex/auth.test.ts` with `convex-test` cases: `adminPing` rejects with no identity; rejects identity not in `ADMIN_CLERK_USER_IDS`; returns `{ ok: true }` for allow-listed identity; rejects everyone when the list is empty or unset
-- [ ] T024 [P] [US2] Add `access.current` cases to `tests/convex/auth.test.ts`: returns `"unauthenticated"`, `"denied"`, `"admin"` for the three identities
-- [ ] T025 [P] [US2] Add `tests/convex/audit.test.ts`: `writeAudit` inserts a record with `actorId`, `action`, `entityTable`, `entityId`, optional `summary` and `changedFields`; assert the module exports no update/delete helper
+- [X] T023 [P] [US2] Add `tests/convex/auth.test.ts` with `convex-test` cases: `adminPing` rejects with no identity; rejects identity not in `ADMIN_CLERK_USER_IDS`; returns `{ ok: true }` for allow-listed identity; rejects everyone when the list is empty or unset
+- [X] T024 [P] [US2] Add `access.current` cases to `tests/convex/auth.test.ts`: returns `"unauthenticated"`, `"denied"`, `"admin"` for the three identities
+- [X] T025 [P] [US2] Add `tests/convex/audit.test.ts`: `writeAudit` inserts a record with `actorId`, `action`, `entityTable`, `entityId`, optional `summary` and `changedFields`; assert the module exports no update/delete helper
 
 ### Implementation for User Story 2
 
-- [ ] T026 [US2] Create `components/admin/access-gate.tsx` (client) calling `api.access.current`: loading → skeleton; `unauthenticated` → redirect to `/sign-in`; `denied` → access-denied view (no admin content rendered); `admin` → children
-- [ ] T027 [US2] Wrap the shell in `app/admin/layout.tsx` with `AccessGate` so sidebar and dashboard never render for non-admins
-- [ ] T028 [US2] Wire the placeholder dashboard in `app/admin/page.tsx` to call `api.admin.adminPing` and show a confirmation line, proving the guarded call works
-- [ ] T029 [US2] Document in `specs/001-platform-admin-signin/quickstart.md` the verified Clerk steps: restrict sign-up (invite-only/closed), enable Google SSO, create `convex` JWT template, set `CLERK_JWT_ISSUER_DOMAIN` and `ADMIN_CLERK_USER_IDS` in Convex env; record plan availability findings
+- [X] T026 [US2] Create `components/admin/access-gate.tsx` (client) calling `api.access.current`: loading → skeleton; `unauthenticated` → redirect to `/sign-in`; `denied` → access-denied view (no admin content rendered); `admin` → children
+- [X] T027 [US2] Wrap the shell in `app/admin/layout.tsx` with `AccessGate` so sidebar and dashboard never render for non-admins
+- [X] T028 [US2] Wire the placeholder dashboard in `app/admin/page.tsx` to call `api.admin.adminPing` and show a confirmation line, proving the guarded call works
+- [X] T029 [US2] Document in `specs/001-platform-admin-signin/quickstart.md` the verified Clerk steps: restrict sign-up (invite-only/closed), enable Google SSO, create `convex` JWT template, set `CLERK_JWT_ISSUER_DOMAIN` and `ADMIN_CLERK_USER_IDS` in Convex env; record plan availability findings
 
 **Checkpoint**: `npm test` passes; non-admin paths denied in UI and backend.
 
